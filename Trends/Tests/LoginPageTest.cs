@@ -26,15 +26,14 @@ namespace Trends.Tests
             lp.GetWebDriverWait().Until(driver => driver.WindowHandles.Count > 1);
 
             // Switch to the new tab (Google login)
-            foreach (string handle in _driver.WindowHandles) 
+            foreach (string handle in _driver.WindowHandles)
             {
                 if (handle != mainWindow)
                 {
-                    _driver.SwitchTo().Window(handle); 
+                    _driver.SwitchTo().Window(handle);
                     break;
                 }
             }
-
             lp.EnterEmail("nisargahathwar@gmail.com");
             lp.ClickNextButton();
             lp.EnterPassword("Nisu@01022001");

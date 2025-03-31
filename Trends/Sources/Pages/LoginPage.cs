@@ -13,7 +13,6 @@ namespace Trends.Sources.Pages
     {
         IWebDriver _webDriver;
 
-
         [FindsBy(How = How.ClassName, Using = "google-login")]
         private IWebElement googleSelect;
 
