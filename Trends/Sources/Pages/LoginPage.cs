@@ -16,13 +16,13 @@ namespace Trends.Sources.Pages
         [FindsBy(How = How.ClassName, Using = "google-login")]
         private IWebElement googleSelect;
 
-        [FindsBy(How = How.CssSelector, Using = "#identifierId")]
+        [FindsBy(How = How.XPath, Using = "//input[@id='identifierId']")]
         private IWebElement signInTextBox;
 
         [FindsBy(How = How.XPath, Using = "//*[@id=\"identifierNext\"]/div/button")]
         private IWebElement nextButton;
 
-        [FindsBy(How = How.Name, Using = "Passwd")]
+        [FindsBy(How = How.XPath, Using = "//input[@name='Passwd']")]
         private IWebElement passwordTextBox;
 
         [FindsBy(How = How.XPath, Using = "//*[@id=\"passwordNext\"]/div/button")]

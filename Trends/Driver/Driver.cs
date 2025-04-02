@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using WebDriverManager.DriverConfigs.Impl;
 using WebDriverManager.Helpers;
 using WebDriverManager;
+using OpenQA.Selenium.Remote;
 
 namespace Trends.Drivers
 {
@@ -45,7 +46,29 @@ namespace Trends.Drivers
             options.AddArgument("--start-maximized");
 
             // ✅ Pass options to ChromeDriver
-            _driver = new ChromeDriver(options);
+            // _driver = new ChromeDriver(options);
+
+            // run the test in lambdatest
+            string username = "nisargahathwar";
+            string accessKey = "LT_xxnWLYjzrDT5HdLBXmRs74YYbQMX4oRFqm5L1S33yfluq3W";
+            string lambdaTestUrl = $"https://{username}:{accessKey}@hub.lambdatest.com/wd/hub";
+
+            //ChromeOptions options = new ChromeOptions();
+            options.BrowserVersion = "latest"; // You can specify a version
+            options.PlatformName = "Windows 10"; // Specify OS
+
+            // Set LambdaTest Capabilities
+            var ltOptions = new Dictionary<string, object>
+            {
+                 { "build", "Selenium-CSharp-Test" },  // Group multiple test cases under one build
+                 { "name", "Ajio Search Test" },      // Test case name
+                 { "w3c", true },                      // Use W3C protocol
+                 { "plugin", "csharp-testng" }
+            };
+            options.AddAdditionalOption("LT:Options", ltOptions);
+
+            _driver = new RemoteWebDriver(new Uri(lambdaTestUrl), options);
+
         }
         [TearDown]
         public void Cleanup()
