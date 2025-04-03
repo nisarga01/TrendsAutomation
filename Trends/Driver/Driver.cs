@@ -9,6 +9,7 @@ using WebDriverManager.DriverConfigs.Impl;
 using WebDriverManager.Helpers;
 using WebDriverManager;
 using OpenQA.Selenium.Remote;
+using Newtonsoft.Json;
 
 namespace Trends.Drivers
 {
@@ -56,6 +57,7 @@ namespace Trends.Drivers
             //ChromeOptions options = new ChromeOptions();
             options.BrowserVersion = "latest"; // You can specify a version
             options.PlatformName = "Windows 10"; // Specify OS
+            options.AddAdditionalOption("geoLocation", "IN");
 
             // Set LambdaTest Capabilities
             var ltOptions = new Dictionary<string, object>
@@ -63,12 +65,32 @@ namespace Trends.Drivers
                  { "build", "Selenium-CSharp-Test" },  // Group multiple test cases under one build
                  { "name", "Ajio Search Test" },      // Test case name
                  { "w3c", true },                      // Use W3C protocol
-                 { "plugin", "csharp-testng" }
+                { "visual", true },// Use W3C protocol
+                 { "plugin", "csharp-testng" },
+                {"platformName", "Windows 10" },
+                { "smartUI.project","Trends-Smart-UI" }
             };
             options.AddAdditionalOption("LT:Options", ltOptions);
 
             _driver = new RemoteWebDriver(new Uri(lambdaTestUrl), options);
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
 
+            // ✅ Load cookies if available
+            if (File.Exists("cookies.json"))
+            {
+                var savedCookies = JsonConvert.DeserializeObject<List<Cookie>>(File.ReadAllText("cookies.json"));
+                foreach (var cookie in savedCookies)
+                {
+                    _driver.Manage().Cookies.AddCookie(cookie);
+                }
+                _driver.Navigate().Refresh(); // Apply cookies
+            }
+
+        }
+        //Screenshot Helper Method
+        public void CaptureScreenShot(string screenshotName)
+        {
+            ((IJavaScriptExecutor)_driver).ExecuteScript($"smartui.takeScreenshot='{screenshotName}_{DateTime.Now:yyyyMMddHHmmss}'");
         }
         [TearDown]
         public void Cleanup()
@@ -76,7 +98,7 @@ namespace Trends.Drivers
             if (_driver != null)
             {
                 _driver.Dispose();
-                Thread.Sleep(3000);// ✅ Close the browser after test execution
+                Thread.Sleep(3000);
             }
         }
     }
