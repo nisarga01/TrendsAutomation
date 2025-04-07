@@ -49,9 +49,12 @@ namespace Trends.Drivers
             // ✅ Pass options to ChromeDriver
             // _driver = new ChromeDriver(options);
 
-            // run the test in lambdatest
-            string username = "nisargahathwar";
-            string accessKey = "LT_xxnWLYjzrDT5HdLBXmRs74YYbQMX4oRFqm5L1S33yfluq3W";
+            //// run the test in lambdatest
+            //string username = "nisargahathwar";
+            //string accessKey = "LT_xxnWLYjzrDT5HdLBXmRs74YYbQMX4oRFqm5L1S33yfluq3W";
+            //Using Github actions
+            string username = Environment.GetEnvironmentVariable("LT_USERNAME");
+            string accessKey = Environment.GetEnvironmentVariable("LT_ACCESS_KEY");
             string lambdaTestUrl = $"https://{username}:{accessKey}@hub.lambdatest.com/wd/hub";
 
             //ChromeOptions options = new ChromeOptions();
